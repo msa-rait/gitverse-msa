@@ -1,0 +1,157 @@
+Git & GitHub Cheat Sheet
+Every command from the workshop, with what it does
+Core loop: edit -> add -> commit -> push
+
+
+1. TERMINAL BASICS
+pwd                                      Show the current folder (where am I?)
+ls / ls -a                               List files / include hidden files like .git
+cd ~                                     Go to your home folder
+cd git-practice                          Go into a folder
+cd ..                                    Go up one folder
+mkdir git-practice                       Create a new folder
+touch about.txt                          Create an empty file
+code .                                   Open the current folder in VS Code
+Windows users: use Git Bash, not PowerShell.
+
+
+2. SETUP (ONCE PER LAPTOP)
+git --version                            Check Git is installed
+git config --global user.name "Your Name" Set your name for commits
+git config --global user.email "you@mail.com"
+                                         Set your email for commits
+git config --global init.defaultBranch main
+                                         New repos start on main
+git config --list                        Verify your settings
+
+
+3. FIRST REPO, STAGING, FIRST PUSH
+git init                                 Turn the folder into a repository
+git status                               What changed? What is staged?
+git add about.txt                        Stage one file (put it in the basket)
+git add .                                Stage all changes
+git commit -m "message"                 Save a snapshot with a message
+git log --oneline                        Short history, one line per commit
+git remote add origin <link>             Connect local repo to GitHub
+git remote -v                            Show remote links
+git push -u origin main                  First push (sets up tracking)
+git push                                 Later pushes
+Create the GitHub repo EMPTY: no README, no .gitignore.
+
+
+4. LOOKING AT CHANGES
+git status                               Where am I?
+git diff                                 Folder vs staging (unstaged changes)
+git diff --staged                        Staging vs last commit (what you will save)
+git log --oneline --graph                History as a simple graph
+git show <hash>                          Show what one commit changed
+Habit: status, then diff --staged, then commit.
+
+
+5. UNDOING MISTAKES
+git restore about.txt                    Discard unstaged edits (gone for good)
+git restore --staged about.txt           Unstage a file, keep your edits
+git restore --staged .                   Unstage everything
+git commit --amend -m "New msg"          Fix the last commit message (before pushing)
+git revert HEAD                          Safely cancel the last commit with a new commit
+git revert <hash>                        Safely cancel any specific commit
+Already pushed something wrong? Use revert.
+
+
+6. IGNORING FILES
+touch .gitignore                         Create the ignore file
+*.log                                    (in .gitignore) ignore all log files
+node_modules/                            (in .gitignore) ignore the dependency folder
+.env                                     (in .gitignore) ignore passwords and keys
+git rm --cached <file>                   Stop tracking a file already committed
+git rm --cached -r <folder>/             Same, for a folder
+Never commit passwords, keys or .env. Once pushed, assume it is public. Leaked a key? Rotate it.
+
+
+7. BRANCHES, MERGING, CONFLICTS
+git branch / git branch -a               List local branches / include remote
+git switch -c about-hobbies               Create a branch and switch to it
+git switch main                          Go back to main
+git switch -                              Jump to the previous branch
+git merge about-hobbies                  Merge that branch INTO the one you are on
+git log --graph --oneline                See how branches joined
+git merge --abort                        Emergency exit from a conflicted merge
+git branch -d about-hobbies              Delete a merged branch
+<<<<<<< HEAD                             Conflict marker: start of your version
+=======                                  Conflict marker: divider
+>>>>>>> branch                           Conflict marker: end of the other version
+Receiver first: go to the branch that receives the work, then name the branch you bring in.
+To fix a conflict: choose what to keep, delete the 3 marker lines, git add, git commit.
+
+
+8. STASH
+git stash                                Put half-finished work on the shelf
+git stash list                           See what is on the shelf
+git stash pop                            Bring the work back
+git stash drop                           Delete a stash item
+git stash -u                             Also stash brand-new (untracked) files
+
+
+9. CLONE, PULL, FETCH
+git clone <link> <folder>                Copy a GitHub repo to your laptop (first time)
+git pull                                 Fetch + merge new work from GitHub
+git fetch                                Download the news only, files unchanged
+git status                               Shows if you are behind origin/main
+Push goes up. Clone, pull and fetch bring work down. When in doubt, pull.
+
+
+10. README + MARKDOWN
+README.md                                Project front door, must be in the top folder
+# heading / ## smaller                   Headings
+**bold**                                 Bold text
+- list item                              Bullet point
+[text](link)                             Clickable link
+Ctrl+Shift+V (Mac: Cmd+Shift+V)          Preview Markdown in VS Code
+
+
+11. PULL REQUEST FLOW
+git switch -c add-name                   Create a branch for your change
+git add . then git commit -m "..."       Stage and save your change
+git push -u origin add-name              Publish the branch to GitHub
+(on GitHub) Compare & pull request       Open the PR, write what / why / how to check
+git commit + git push                    Review feedback? Push again, same PR updates
+git switch main then git pull            After merge, bring the merged work down
+git branch -d add-name                   Clean up the old branch
+A pull request says: I made a change, please look at it.
+
+
+12. FORK FLOW (SHARED REPO)
+(on GitHub) Fork                         Make your own copy of the repo
+git clone <your-fork-link>               Clone YOUR fork, not the original
+git remote -v                            origin should point to your fork
+git remote add upstream <original>       Link to the original repo (optional)
+git fetch upstream                       Get the original's latest changes
+git merge upstream/main                  Bring them into your branch
+origin is your fork. The PR is how your fork talks to the original repo.
+
+
+13. ISSUES
+Fixes #3                                 Write in a PR description: merging closes issue #3
+An issue is a to-do, bug or question. A pull request is a change.
+
+
+14. BEYOND THE BASICS (STRETCH)
+git rebase main                          Move your branch commits onto latest main
+git cherry-pick <hash>                   Copy one commit onto the current branch
+git tag -a v1.0 -m "..."                 Mark a version that never moves
+git tag                                  List tags
+git push --tags                          Publish tags to GitHub
+git reset --hard <hash>                  Jump back and discard later work (dangerous)
+git reflog                               Log of every HEAD move (rescue tool)
+Golden rule: never rebase commits that are already shared.
+
+
+15. WHEN THINGS GO WRONG
+Author identity unknown                  Set user.name and user.email (section 2)
+Permission denied on push                You cloned the original, not your fork. Check git remote -v
+Authentication failed                    Run gh auth login, or use a Personal Access Token
+Updates were rejected                    Remote has newer work. Run git pull first
+Not sure what is happening               Run git status. Always.
+
+
+Git x GitHub Workshop | Microsoft Student Ambassador
